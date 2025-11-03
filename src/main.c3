@@ -39,10 +39,10 @@ macro uint? find_opening(char[] instructions, uint i_idx) {
 	return NO_MATCHING_BRACKET?;
 }
 
-fn int main(String[] args)
-{
+faultdef EXCEEDED_DATA;
+
+fn void? interpret(char[] instructions, InStream stdin = io::stdin(), OutStream stdout = io::stdout()) {
 	char[30000] data;
-	char[*] instructions = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.";
 	uint d_idx = 0;
 	uint i_idx = 0;
 
@@ -53,35 +53,43 @@ fn int main(String[] args)
 					d_idx++;
 				} else {
 					io::eprintn("Ran over end of data-array.");
-					return 1;
+					return EXCEEDED_DATA?;
 				}
 			case '<':
 				if (d_idx > 0) {
 					d_idx--;
 				} else {
 					io::eprintn("Ran over beginning of data-array.");
+					return EXCEEDED_DATA?;
 				}
 			case '+':
 				data[d_idx]++;
 			case '-':
 				data[d_idx]--;
 			case '.':
-				io::putchar(data[d_idx]);
+				stdout.write_byte(data[d_idx])!;
 				// If I want to debug:
 				// io::printf("%c", data[d_idx]);
 			case ',':
-				data[d_idx] = io::stdin().read_byte()!!;
+				data[d_idx] = stdin.read_byte()!;
 			case '[':
 				if (data[d_idx] == 0) {
-					i_idx = find_closing(&instructions, i_idx)!!;
+					i_idx = find_closing(instructions, i_idx)!;
 				}
 			case ']':
 				if (data[d_idx] != 0) {
-					i_idx = find_opening(&instructions, i_idx)!!;
+					i_idx = find_opening(instructions, i_idx)!;
 				}
 		}
 		i_idx++;
 	}
+}
+
+fn int main(String[] args)
+{
+	char[*] instructions = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+.+++++++..+++.<<++.>+++++++++++++++.>.+++.------.--------.";
+	interpret(&instructions)!!;
+
 	io::putchar('\n');
 	return 0;
 }
