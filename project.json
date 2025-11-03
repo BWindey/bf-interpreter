@@ -1,0 +1,18 @@
+{
+	"langrev": "1",
+	"warnings": [ "no-unused" ],
+	"authors": [ "BWindey" ],
+	"version": "0.1.0",
+	"sources": [ "src/**" ],
+	"test-sources": [ "test/**" ],
+	"build-dir": "build",
+	"output": "build",
+	"targets": {
+		"brainfuck": {
+			"type": "executable",
+			"quiet": true
+		}
+	},
+	"cpu": "generic",
+	"opt": "O0"
+}
