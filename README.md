@@ -23,6 +23,16 @@ initialised to `0`, and a data pointer into that array.
 ## Extensions
 This interpreter accepts certain extensions to the normal language.
 
+### Comments
+To support other extensions, comments have to be well defined. This is achieved
+by starting a comment with `#` and ending it with `#`. Everything beween those
+hash-characters will be ignored.
+
+Normal brainfuck would just ignore all characters that are not part of the
+actual language, but because I added routines, you cannot write comments
+anymore like you would in brainfuck. Thus the need for defining comments.
+
+
 ### Routines
 Routines are created with the syntax `{[a-Z]+...}`, meaning that a routines
 declaration begins with a `{` and ends with a `}`. It has a name with one
@@ -41,6 +51,8 @@ Limitations:
 - routines cannot be used before they're declared
 - when a routine with the same prefix exists but shorter, the one with the
   longer name will never get called (when parsing first match is executed)
+- routines cannot call themselves
+
 
 #### Examples:
 ##### Sum of two numbers
