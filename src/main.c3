@@ -17,7 +17,7 @@ macro uint? find_closing(char[] instructions, uint i_idx) {
 		}
 	}
 
-	return NO_MATCHING_BRACKET?;
+	return NO_MATCHING_BRACKET~;
 }
 
 macro uint? find_opening(char[] instructions, uint i_idx) {
@@ -33,7 +33,7 @@ macro uint? find_opening(char[] instructions, uint i_idx) {
 		}
 	}
 
-	return NO_MATCHING_BRACKET?;
+	return NO_MATCHING_BRACKET~;
 }
 
 faultdef INCOMPLETE_FUNCTION;
@@ -55,7 +55,7 @@ fn uint? fill_in_function(
 	i_idx--;
 
 	String function_body = (*map)[instructions[start_name..i_idx]]!;
-	builder.append_chars(function_body);
+	builder.append_string(function_body);
 
 	return i_idx;
 }
@@ -70,7 +70,7 @@ fn char[]? find_func_name(char[] instructions, uint* i_idx) {
 			name_start = *i_idx;
 			name_end = *i_idx;
 			(*i_idx)++;
-			if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION?;
+			if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION~;
 		default:
 			(*i_idx)++;
 			nextcase instructions[*i_idx];
@@ -81,7 +81,7 @@ fn char[]? find_func_name(char[] instructions, uint* i_idx) {
 		case 'a'..'z':
 		case 'A'..'Z':
 			(*i_idx)++;
-			if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION?;
+			if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION~;
 			nextcase instructions[*i_idx];
 		default:
 			name_end = *i_idx - 1;
@@ -96,7 +96,7 @@ fn char[]? find_func_body(char[] instructions, uint* i_idx) {
 	while (*i_idx < instructions.len && instructions[*i_idx] != '}') {
 		(*i_idx)++;
 	}
-	if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION?;
+	if (*i_idx >= instructions.len) return INCOMPLETE_FUNCTION~;
 	uint body_end = *i_idx - 1;
 
 	return instructions[body_start..body_end];
@@ -168,14 +168,14 @@ fn void? interpret(
 					d_idx++;
 				} else {
 					io::eprintn("Ran over end of data-array.");
-					return EXCEEDED_DATA?;
+					return EXCEEDED_DATA~;
 				}
 			case '<':
 				if (d_idx > 0) {
 					d_idx--;
 				} else {
 					io::eprintn("Ran over beginning of data-array.");
-					return EXCEEDED_DATA?;
+					return EXCEEDED_DATA~;
 				}
 			case '+':
 				data[d_idx]++;
